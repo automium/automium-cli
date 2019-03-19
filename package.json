@@ -1,0 +1,65 @@
+{
+  "name": "automium-cli",
+  "version": "1.0.0",
+  "description": "Automium CLI",
+  "main": "dist/cli.js",
+  "author": "Automium Team",
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/automium/automium-cli",
+    "type": "git"
+  },
+  "files": ["dist"],
+  "dependencies": {
+    "@sentry/node": "^4.6.3",
+    "automium-sdk": "^1.0.2",
+    "ink": "^2.0.5",
+    "ink-select-input": "^3.0.2",
+    "ink-text-input": "^3.0.0",
+    "meow": "^5.0.0",
+    "react": "^16.8.4"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.0",
+    "@babel/core": "^7.2.0",
+    "@babel/node": "^7.2.0",
+    "@babel/plugin-proposal-class-properties": "^7.3.3",
+    "@babel/polyfill": "^7.2.0",
+    "@babel/preset-env": "^7.2.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.14.0",
+    "eslint-config-react-app": "^3.0.8",
+    "eslint-plugin-flowtype": "^3.4.2",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-react": "^7.12.4",
+    "jest": "^24.1.0",
+    "jest-cli": "^24.1.0",
+    "prettier": "^1.16.4",
+    "rimraf": "^2.6.3"
+  },
+  "bin": {
+    "automium-cli": "dist/cli.js"
+  },
+  "scripts": {
+    "validate": "yarn prettier:check && yarn lint:eslint",
+    "prettier:check": "yarn prettier --debug-check $npm_package_config_prettier_target",
+    "prettier:write": "yarn prettier --write $npm_package_config_prettier_target",
+    "lint:eslint": "yarn eslint $npm_package_config_prettier_target",
+    "test": "jest",
+    "clean": "rimraf dist/*",
+    "build": "yarn clean && babel src --out-dir dist --ignore tests"
+  },
+  "config": {
+    "prettier_target": "src/**/*.{js,md,json}"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "./dist"
+    ]
+  }
+}
