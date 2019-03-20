@@ -13,9 +13,9 @@ class Infra extends Component {
         { label: "Specs", value: "specs" },
         { label: "Services", value: "services" }
       ],
-      specs: [],
       data: [],
-      selectedSpec: "",
+      services: [],
+      selectedService: "",
       selectedCmd: "",
       stage: "CMD"
     };
@@ -27,7 +27,7 @@ class Infra extends Component {
   };
 
   handleSelect = item => {
-    this.setState({ stage: "SELECTED", selectedSpec: item.value });
+    this.setState({ stage: "SELECTED", selectedService: item.value });
   };
 
   runCmd = async cmd => {
@@ -40,25 +40,38 @@ class Infra extends Component {
           value: item.metadata.name
         });
       });
-      this.setState({ stage: "SPECS", specs: specs, data: data });
+      this.setState({ stage: "SERVICES", services: specs, data: data });
+    }
+    if (cmd === "services") {
+      const data = await this.props.client.services();
+      let services = [];
+      data.forEach(item => {
+        services.push({
+          label: item.data.metadata.name,
+          value: item.data.metadata.name
+        });
+      });
+      this.setState({ stage: "SERVICES", services: services, data: data });
     }
   };
 
-  GetSpec = name => {
+  GetData = (name, cmd) => {
     if (this.state.data.length === 0) {
       return {};
     }
-    const data = this.state.data.filter(item => item.metadata.name === name);
-    return data[0];
-  };
-
-  GetTextSpec = name => {
-    const data = this.state.data.filter(item => item.metadata.name === name);
-    return JSON.stringify(data[0], null, 2);
+    if (cmd === "specs") {
+      const data = this.state.data.filter(item => item.metadata.name === name);
+      return data[0];
+    }
+    if (cmd === "services") {
+      const services = this.state.data.filter(
+        item => item.data.metadata.name === name
+      );
+      return services[0].data;
+    }
   };
 
   render() {
-    const data = this.GetSpec(this.state.selectedSpec);
     return (
       <div>
         {this.state.stage === "LOADING" && (
@@ -70,10 +83,21 @@ class Infra extends Component {
         {this.state.stage === "CMD" && (
           <SelectInput items={this.state.cmd} onSelect={this.handleCmdSelect} />
         )}
-        {(this.state.stage === "SPECS" || this.state.stage === "SELECTED") && (
-          <SelectInput items={this.state.specs} onSelect={this.handleSelect} />
+        {(this.state.stage === "SERVICES" ||
+          this.state.stage === "SELECTED") && (
+          <SelectInput
+            items={this.state.services}
+            onSelect={this.handleSelect}
+          />
         )}
-        {this.state.stage === "SELECTED" && <Spec data={data} />}
+        {this.state.stage === "SELECTED" && (
+          <Spec
+            data={this.GetData(
+              this.state.selectedService,
+              this.state.selectedCmd
+            )}
+          />
+        )}
       </div>
     );
   }
