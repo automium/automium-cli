@@ -6,14 +6,28 @@ import meow from "meow";
 import { render } from "ink";
 import Main from "./components/Main";
 
-/* eslint-disable no-unused-vars */
 const cli = meow(
   `
     Usage
       $ automium-cli  
-  `
+
+    Options
+      --url, -u   Set the Automium endpoint
+      --token, -t Use an authentication token
+  `,
+  {
+    flags: {
+      url: {
+        type: "string",
+        alias: "u"
+      },
+      token: {
+        type: "string",
+        alias: "t"
+      }
+    }
+  }
 );
-/* eslint-enable no-unused-vars */
 
 const main = () => {
   let unmount; // eslint-disable-line prefer-const
@@ -28,7 +42,7 @@ const main = () => {
     process.exit();
   };
 
-  unmount = render(<Main />, { onError, onExit });
+  unmount = render(<Main config={cli.flags} />, { onError, onExit });
 };
 
 main();

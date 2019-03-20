@@ -9,12 +9,15 @@
     "url": "https://github.com/automium/automium-cli",
     "type": "git"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "dependencies": {
     "@sentry/node": "^4.6.3",
     "automium-sdk": "^1.0.2",
     "ink": "^2.0.5",
     "ink-select-input": "^3.0.2",
+    "ink-spinner": "^3.0.0",
     "ink-text-input": "^3.0.0",
     "meow": "^5.0.0",
     "react": "^16.8.4"

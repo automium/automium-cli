@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-import { Color, Box } from "ink";
+import { Color } from "ink";
 import SelectInput from "ink-select-input";
+import Spinner from "ink-spinner";
+import Spec from "../Specs/Spec";
 
 class Infra extends Component {
   constructor(props) {
@@ -12,14 +14,15 @@ class Infra extends Component {
         { label: "Services", value: "services" }
       ],
       specs: [],
-      data: {},
+      data: [],
       selectedSpec: "",
+      selectedCmd: "",
       stage: "CMD"
     };
   }
 
   handleCmdSelect = item => {
-    this.setState({ stage: "LOADING" });
+    this.setState({ stage: "LOADING", selectedCmd: item.value });
     this.runCmd(item.value);
   };
 
@@ -42,24 +45,35 @@ class Infra extends Component {
   };
 
   GetSpec = name => {
-    const specs = this.state.data.filter(item => item.metadata.name === name);
-    return JSON.stringify(specs[0], null, 2);
+    if (this.state.data.length === 0) {
+      return {};
+    }
+    const data = this.state.data.filter(item => item.metadata.name === name);
+    return data[0];
+  };
+
+  GetTextSpec = name => {
+    const data = this.state.data.filter(item => item.metadata.name === name);
+    return JSON.stringify(data[0], null, 2);
   };
 
   render() {
+    const data = this.GetSpec(this.state.selectedSpec);
     return (
       <div>
+        {this.state.stage === "LOADING" && (
+          <Color green>
+            <Spinner type="dots" />
+            {` Loading ${this.state.selectedCmd}`}
+          </Color>
+        )}
         {this.state.stage === "CMD" && (
           <SelectInput items={this.state.cmd} onSelect={this.handleCmdSelect} />
         )}
-        {this.state.stage === "SPECS" && (
+        {(this.state.stage === "SPECS" || this.state.stage === "SELECTED") && (
           <SelectInput items={this.state.specs} onSelect={this.handleSelect} />
         )}
-        {this.state.stage === "SELECTED" && (
-          <Box>
-            <Color grey>{this.GetSpec(this.state.selectedSpec)}</Color>
-          </Box>
-        )}
+        {this.state.stage === "SELECTED" && <Spec data={data} />}
       </div>
     );
   }
