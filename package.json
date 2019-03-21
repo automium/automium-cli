@@ -1,6 +1,6 @@
 {
   "name": "automium-cli",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
   "description": "Automium CLI",
   "main": "dist/cli.js",
   "author": "Automium Team",
@@ -14,7 +14,7 @@
   ],
   "dependencies": {
     "@sentry/node": "^4.6.3",
-    "automium-sdk": "^1.0.2",
+    "automium": "^1.1.1",
     "ink": "^2.0.5",
     "ink-select-input": "^3.0.2",
     "ink-spinner": "^3.0.0",
@@ -41,7 +41,8 @@
     "jest": "^24.1.0",
     "jest-cli": "^24.1.0",
     "prettier": "^1.16.4",
-    "rimraf": "^2.6.3"
+    "rimraf": "^2.6.3",
+    "semantic-release": "^15.13.3"
   },
   "bin": {
     "automium-cli": "dist/cli.js"
@@ -53,7 +54,8 @@
     "lint:eslint": "yarn eslint $npm_package_config_prettier_target",
     "test": "jest",
     "clean": "rimraf dist/*",
-    "build": "yarn clean && babel src --out-dir dist --ignore tests"
+    "build": "yarn clean && babel src --out-dir dist --ignore tests",
+    "semantic-release": "semantic-release"
   },
   "config": {
     "prettier_target": "src/**/*.{js,md,json}"

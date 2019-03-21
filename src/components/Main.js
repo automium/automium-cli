@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Box, Color } from "ink";
-import { Client } from "automium-sdk";
+import { Client } from "automium";
 import Login from "./Login";
 import Infra from "./Infra/Infra";
 
