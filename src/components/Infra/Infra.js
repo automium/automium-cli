@@ -3,6 +3,7 @@ import { Color } from "ink";
 import SelectInput from "ink-select-input";
 import Spinner from "ink-spinner";
 import Spec from "../Specs/Spec";
+import NewService from "../Services/NewService";
 
 class Infra extends Component {
   constructor(props) {
@@ -11,7 +12,8 @@ class Infra extends Component {
     this.state = {
       cmd: [
         { label: "Specs", value: "specs" },
-        { label: "Services", value: "services" }
+        { label: "Services", value: "services" },
+        { label: "Add Service", value: "add" }
       ],
       data: [],
       services: [],
@@ -27,7 +29,11 @@ class Infra extends Component {
   };
 
   handleSelect = item => {
-    this.setState({ stage: "SELECTED", selectedService: item.value });
+    if (this.state.selectedCmd === "add") {
+      this.setState({ stage: "ADD", selectedService: item.value });
+    } else {
+      this.setState({ stage: "SELECTED", selectedService: item.value });
+    }
   };
 
   runCmd = async cmd => {
@@ -53,6 +59,17 @@ class Infra extends Component {
       });
       this.setState({ stage: "SERVICES", services: services, data: data });
     }
+    if (cmd === "add") {
+      const data = this.props.client.catalog;
+      let services = [];
+      data.forEach(item => {
+        services.push({
+          label: item.metadata.labels.app,
+          value: item.metadata.labels.app
+        });
+      });
+      this.setState({ stage: "SERVICES", services: services, data: data });
+    }
   };
 
   GetData = (name, cmd) => {
@@ -68,6 +85,12 @@ class Infra extends Component {
         item => item.data.metadata.name === name
       );
       return services[0].data;
+    }
+    if (cmd === "add") {
+      const data = this.state.data.filter(
+        item => item.metadata.labels.app === name
+      );
+      return data[0];
     }
   };
 
@@ -92,6 +115,14 @@ class Infra extends Component {
         )}
         {this.state.stage === "SELECTED" && (
           <Spec
+            data={this.GetData(
+              this.state.selectedService,
+              this.state.selectedCmd
+            )}
+          />
+        )}
+        {this.state.stage === "ADD" && (
+          <NewService
             data={this.GetData(
               this.state.selectedService,
               this.state.selectedCmd
