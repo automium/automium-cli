@@ -1,6 +1,6 @@
 {
   "name": "automium-cli",
-  "version": "0.0.0-development",
+  "version": "1.0.0",
   "description": "Automium CLI",
   "main": "dist/cli.js",
   "author": "Automium Team",
