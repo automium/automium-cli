@@ -123,6 +123,7 @@ class Infra extends Component {
         )}
         {this.state.stage === "ADD" && (
           <NewService
+            client={this.props.client}
             data={this.GetData(
               this.state.selectedService,
               this.state.selectedCmd
