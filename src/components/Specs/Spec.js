@@ -2,10 +2,6 @@ import React, { Component } from "react";
 import { Color, Box } from "ink";
 
 class Spec extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { data } = this.props;
     return (
