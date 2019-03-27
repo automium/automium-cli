@@ -6,10 +6,15 @@ class NewService extends Component {
   constructor(props) {
     super(props);
 
+    //set expected stages
+    let stages = ["FLAVOR", "REPLICAS", "VERSION"];
+    if (props.data.spec.env.length > 0) stages.push("ENV");
+
     this.state = {
-      stages: ["FLAVOR", "REPLICAS", "VERSION"],
-      stage: "FLAVOR",
-      data: props.data
+      stages: stages,
+      stage: stages[0],
+      data: props.data,
+      env: 0
     };
   }
 
@@ -19,17 +24,29 @@ class NewService extends Component {
 
   handleKeyPress = (ch, key) => {
     if (key.name === "return") {
-      let stage = this.state.stages.shift();
-      this.setState({ stage: stage });
+      if (this.state.stage === "ENV") {
+        let nextEnv = this.state.env + 1;
+        if (nextEnv < this.state.data.spec.env.length) {
+          //process next env
+          this.setState({ env: nextEnv });
+        } else {
+          //finish
+          this.setState({ stage: undefined });
+        }
+      } else {
+        //process next stage
+        let stage = this.state.stages.shift();
+        this.setState({ stage: stage });
+      }
       //last command
       //TODO: add saving stage
-      if (stage === undefined) {
+      if (this.state.stage === undefined) {
         //TODO: addRawService to the sdk
         let service = this.props.client.addService(
           this.state.data.metadata.labels.app
         );
         service.data.spec = this.state.data.spec;
-        service.save();
+        //service.save();
       }
     }
   };
@@ -45,6 +62,9 @@ class NewService extends Component {
     if (this.state.stage === "VERSION") {
       data.spec.version = value;
     }
+    if (this.state.stage === "ENV") {
+      data.spec.env[this.state.env].value = value;
+    }
     this.setState({ data: data });
   };
 
@@ -56,17 +76,14 @@ class NewService extends Component {
         {this.state.stage === "FLAVOR" && (
           <Box>
             <Box marginRight={1}>Flavor:</Box>
-            <TextInput
-              value={this.props.data.spec.flavor}
-              onChange={this.handleChange}
-            />
+            <TextInput value={data.spec.flavor} onChange={this.handleChange} />
           </Box>
         )}
         {this.state.stage === "REPLICAS" && (
           <Box>
             <Box marginRight={1}>Replicas:</Box>
             <TextInput
-              value={this.props.data.spec.replicas.toString()}
+              value={data.spec.replicas.toString()}
               onChange={this.handleChange}
             />
           </Box>
@@ -74,8 +91,14 @@ class NewService extends Component {
         {this.state.stage === "VERSION" && (
           <Box>
             <Box marginRight={1}>Version:</Box>
+            <TextInput value={data.spec.version} onChange={this.handleChange} />
+          </Box>
+        )}
+        {this.state.stage === "ENV" && (
+          <Box>
+            <Box marginRight={1}>{data.spec.env[this.state.env].name}</Box>
             <TextInput
-              value={this.props.data.spec.version}
+              value={data.spec.env[this.state.env].value}
               onChange={this.handleChange}
             />
           </Box>
