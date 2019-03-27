@@ -1,5 +1,7 @@
 # Automium CLI
 
+[![Build Status](https://travis-ci.org/automium/automium-cli.svg?branch=master)](https://travis-ci.org/automium/automium-cli)
+
 ## Usage
 
 ```
