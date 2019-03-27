@@ -1,6 +1,7 @@
 # Automium CLI
 
 [![Build Status](https://travis-ci.org/automium/automium-cli.svg?branch=master)](https://travis-ci.org/automium/automium-cli)
+[![npm version](https://badge.fury.io/js/automium-cli.svg)](https://www.npmjs.com/package/automium-cli)
 
 ## Usage
 
