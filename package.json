@@ -56,7 +56,7 @@
     "test": "jest",
     "clean": "rimraf dist/*",
     "build": "yarn clean && babel src --out-dir dist --ignore tests",
-    "bundle": "pkg dist/cli.js -c package.json -o packed/automium-cli --options no-warnings",
+    "bundle": "yarn build && pkg dist/cli.js -c package.json -o packed/automium-cli --options no-warnings",
     "pack": "rimraf packed && yarn build && yarn bundle",
     "semantic-release": "semantic-release"
   },
