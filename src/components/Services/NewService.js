@@ -15,7 +15,7 @@ type State = {
   env: number
 };
 
-class NewService extends Component<Props, State> {
+export class NewService extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -126,5 +126,3 @@ class NewService extends Component<Props, State> {
     );
   }
 }
-
-export default NewService;

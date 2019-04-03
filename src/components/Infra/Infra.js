@@ -4,8 +4,7 @@ import { Color } from "ink";
 import SelectInput from "ink-select-input";
 import Spinner from "ink-spinner";
 import Spec from "../Specs/Spec";
-import NewService from "../Services/NewService";
-import DeployService from "../Services/DeployService";
+import { NewService, DeployService, DeleteService } from "../Services/index";
 
 type KeyValue = {
   label: string,
@@ -34,7 +33,8 @@ class Infra extends Component<Props, State> {
         { label: "Specs", value: "specs" },
         { label: "Services", value: "services" },
         { label: "Add Service", value: "add" },
-        { label: "Deploy", value: "deploy" }
+        { label: "Deploy", value: "deploy" },
+        { label: "Delete", value: "delete" }
       ],
       data: [],
       services: [],
@@ -50,17 +50,23 @@ class Infra extends Component<Props, State> {
   };
 
   handleSelect = (item: KeyValue) => {
-    if (this.state.selectedCmd === "add") {
-      this.setState({ stage: "ADD", selectedService: item.value });
-    } else if (this.state.selectedCmd === "deploy") {
-      this.setState({ stage: "DEPLOY", selectedService: item.value });
-    } else {
-      this.setState({ stage: "SELECTED", selectedService: item.value });
+    switch (this.state.selectedCmd) {
+      case "add":
+        this.setState({ stage: "ADD", selectedService: item.value });
+        break;
+      case "deploy":
+        this.setState({ stage: "DEPLOY", selectedService: item.value });
+        break;
+      case "delete":
+        this.setState({ stage: "DELETE", selectedService: item.value });
+        break;
+      default:
+        this.setState({ stage: "SELECTED", selectedService: item.value });
     }
   };
 
   runCmd = async (cmd: string) => {
-    if (cmd === "specs" || cmd === "deploy") {
+    if (cmd === "specs" || cmd === "deploy" || cmd === "delete") {
       const data = await this.props.client.specs();
       let specs = [];
       data.forEach(item => {
@@ -99,7 +105,7 @@ class Infra extends Component<Props, State> {
     if (this.state.data.length === 0) {
       return {};
     }
-    if (cmd === "specs" || cmd === "deploy") {
+    if (cmd === "specs" || cmd === "deploy" || cmd === "delete") {
       const data = this.state.data.filter(item => item.metadata.name === name);
       return data[0];
     }
@@ -123,7 +129,7 @@ class Infra extends Component<Props, State> {
         {this.state.stage === "LOADING" && (
           <Color green>
             <Spinner type="dots" />
-            {` Loading ${this.state.selectedCmd}`}
+            Loading...
           </Color>
         )}
         {this.state.stage === "CMD" && (
@@ -146,6 +152,15 @@ class Infra extends Component<Props, State> {
         )}
         {this.state.stage === "DEPLOY" && (
           <DeployService
+            client={this.props.client}
+            data={this.GetData(
+              this.state.selectedService,
+              this.state.selectedCmd
+            )}
+          />
+        )}
+        {this.state.stage === "DELETE" && (
+          <DeleteService
             client={this.props.client}
             data={this.GetData(
               this.state.selectedService,

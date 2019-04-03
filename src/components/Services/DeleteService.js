@@ -20,7 +20,7 @@ type State = {
   stage: string
 };
 
-export class DeployService extends Component<Props, State> {
+export class DeleteService extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -46,9 +46,12 @@ export class DeployService extends Component<Props, State> {
         let service = await this.props.client.getService(
           this.props.data.metadata.name
         );
-        //TODO: manage deploy result
+        //TODO: manage delete result
+        await service.delete();
+        //deploy the service to scale the resources to 0
         await service.deploy();
-        this.setState({ stage: "DEPLOYED" });
+        //TODO: delete the service itself
+        this.setState({ stage: "DELETED" });
       } catch (err) {
         console.error(err);
       }
@@ -77,18 +80,18 @@ export class DeployService extends Component<Props, State> {
               <Box marginRight={2}>Version:</Box>
               <Color grey>{`${data.spec.version}`}</Color>
             </Box>
-            <Box>--- Confirm Deploy ---</Box>
+            <Box>--- Confirm Delete ---</Box>
             <SelectInput items={this.state.cmd} onSelect={this.handleSelect} />
           </Box>
         )}
         {this.state.stage === "LOADING" && (
           <Color green>
             <Spinner type="dots" />
-            Deploying...
+            Deleting...
           </Color>
         )}
-        {this.state.stage === "DEPLOYED" && (
-          <Color green>Service has been deployed</Color>
+        {this.state.stage === "DELETED" && (
+          <Color green>Service has been deleted</Color>
         )}
       </Fragment>
     );
