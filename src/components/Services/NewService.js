@@ -1,9 +1,22 @@
+// @flow
 import React, { Component } from "react";
 import { Box, Color } from "ink";
 import TextInput from "ink-text-input";
 
-class NewService extends Component {
-  constructor(props) {
+type Props = {
+  client: any,
+  data: any
+};
+
+type State = {
+  stages: Array<string>,
+  stage: string,
+  data: any,
+  env: number
+};
+
+class NewService extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
 
     //set expected stages
@@ -22,7 +35,7 @@ class NewService extends Component {
     process.stdin.on("keypress", this.handleKeyPress);
   }
 
-  handleKeyPress = (ch, key) => {
+  handleKeyPress = (ch: any, key: any) => {
     if (key.name === "return") {
       if (this.state.stage === "ENV") {
         let nextEnv = this.state.env + 1;
@@ -51,7 +64,7 @@ class NewService extends Component {
     }
   };
 
-  handleChange = value => {
+  handleChange = (value: string) => {
     let data = this.state.data;
     if (this.state.stage === "FLAVOR") {
       data.spec.flavor = value;

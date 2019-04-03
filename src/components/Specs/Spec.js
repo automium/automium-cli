@@ -1,7 +1,14 @@
+// @flow
 import React, { Component } from "react";
 import { Color, Box } from "ink";
 
-class Spec extends Component {
+type Props = {
+  data: any
+};
+
+type State = {};
+
+class Spec extends Component<Props, State> {
   render() {
     const { data } = this.props;
     return (

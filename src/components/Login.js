@@ -1,9 +1,17 @@
+// @flow
 import React, { Component } from "react";
 import { Box } from "ink";
 import TextInput from "ink-text-input";
 
-class Login extends Component {
-  constructor(props) {
+type Props = {
+  onLogin: (name: string) => any
+};
+type State = {
+  name: string
+};
+
+class Login extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
@@ -15,7 +23,7 @@ class Login extends Component {
     process.stdin.on("keypress", this.handleKeyPress);
   }
 
-  handleKeyPress = (ch, key) => {
+  handleKeyPress = (ch: any, key: any) => {
     if (key.name === "return") {
       let name = this.state.name;
       if (name === "") {
@@ -25,7 +33,7 @@ class Login extends Component {
     }
   };
 
-  handleChange = name => {
+  handleChange = (name: any) => {
     this.setState({ name });
   };
 

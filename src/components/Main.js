@@ -1,11 +1,21 @@
+// @flow
 import React, { Component } from "react";
 import { Box, Color } from "ink";
 import { Client } from "automium";
 import Login from "./Login";
 import Infra from "./Infra/Infra";
 
-class Main extends Component {
-  constructor(props) {
+type Props = {
+  config: any
+};
+type State = {
+  stage: string,
+  client: any,
+  infra: any
+};
+
+class Main extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     //TODO: add config validation
     const client = new Client({
@@ -29,7 +39,7 @@ class Main extends Component {
     );
   }
 
-  Login = name => {
+  Login = (name: string) => {
     if (name === "default") {
       const infra = this.state.client.infra(name);
       this.setState({ stage: "INFRA", infra: infra });

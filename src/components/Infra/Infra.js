@@ -1,3 +1,4 @@
+// @flow
 import React, { Component } from "react";
 import { Color } from "ink";
 import SelectInput from "ink-select-input";
@@ -5,8 +6,26 @@ import Spinner from "ink-spinner";
 import Spec from "../Specs/Spec";
 import NewService from "../Services/NewService";
 
-class Infra extends Component {
-  constructor(props) {
+type KeyValue = {
+  label: string,
+  value: string
+};
+
+type Props = {
+  client: any
+};
+
+type State = {
+  cmd: Array<KeyValue>,
+  selectedCmd: string,
+  data: any,
+  services: any,
+  selectedService: string,
+  stage: string
+};
+
+class Infra extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
@@ -23,12 +42,12 @@ class Infra extends Component {
     };
   }
 
-  handleCmdSelect = item => {
+  handleCmdSelect = (item: KeyValue) => {
     this.setState({ stage: "LOADING", selectedCmd: item.value });
     this.runCmd(item.value);
   };
 
-  handleSelect = item => {
+  handleSelect = (item: KeyValue) => {
     if (this.state.selectedCmd === "add") {
       this.setState({ stage: "ADD", selectedService: item.value });
     } else {
@@ -36,7 +55,7 @@ class Infra extends Component {
     }
   };
 
-  runCmd = async cmd => {
+  runCmd = async (cmd: string) => {
     if (cmd === "specs") {
       const data = await this.props.client.specs();
       let specs = [];
@@ -72,7 +91,7 @@ class Infra extends Component {
     }
   };
 
-  GetData = (name, cmd) => {
+  GetData = (name: string, cmd: string) => {
     if (this.state.data.length === 0) {
       return {};
     }
