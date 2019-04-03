@@ -14,7 +14,7 @@
   ],
   "dependencies": {
     "@sentry/node": "^4.6.3",
-    "automium": "^1.1.1",
+    "automium": "^1.1.4",
     "ink": "^2.0.5",
     "ink-select-input": "^3.0.2",
     "ink-spinner": "^3.0.0",
