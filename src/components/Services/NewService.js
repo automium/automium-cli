@@ -55,11 +55,14 @@ class NewService extends Component<Props, State> {
       //TODO: add saving stage
       if (this.state.stage === undefined) {
         //TODO: addRawService to the sdk
+        //TODO: add spinner
         let service = this.props.client.addService(
           this.state.data.metadata.labels.app
         );
         service.data.spec = this.state.data.spec;
-        //service.save();
+        //TODO: manage save result (add await)
+        service.save();
+        //TODO: stop the spinner
       }
     }
   };

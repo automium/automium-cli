@@ -5,6 +5,7 @@ import SelectInput from "ink-select-input";
 import Spinner from "ink-spinner";
 import Spec from "../Specs/Spec";
 import NewService from "../Services/NewService";
+import DeployService from "../Services/DeployService";
 
 type KeyValue = {
   label: string,
@@ -32,7 +33,8 @@ class Infra extends Component<Props, State> {
       cmd: [
         { label: "Specs", value: "specs" },
         { label: "Services", value: "services" },
-        { label: "Add Service", value: "add" }
+        { label: "Add Service", value: "add" },
+        { label: "Deploy", value: "deploy" }
       ],
       data: [],
       services: [],
@@ -50,13 +52,15 @@ class Infra extends Component<Props, State> {
   handleSelect = (item: KeyValue) => {
     if (this.state.selectedCmd === "add") {
       this.setState({ stage: "ADD", selectedService: item.value });
+    } else if (this.state.selectedCmd === "deploy") {
+      this.setState({ stage: "DEPLOY", selectedService: item.value });
     } else {
       this.setState({ stage: "SELECTED", selectedService: item.value });
     }
   };
 
   runCmd = async (cmd: string) => {
-    if (cmd === "specs") {
+    if (cmd === "specs" || cmd === "deploy") {
       const data = await this.props.client.specs();
       let specs = [];
       data.forEach(item => {
@@ -95,7 +99,7 @@ class Infra extends Component<Props, State> {
     if (this.state.data.length === 0) {
       return {};
     }
-    if (cmd === "specs") {
+    if (cmd === "specs" || cmd === "deploy") {
       const data = this.state.data.filter(item => item.metadata.name === name);
       return data[0];
     }
@@ -134,6 +138,15 @@ class Infra extends Component<Props, State> {
         )}
         {this.state.stage === "SELECTED" && (
           <Spec
+            data={this.GetData(
+              this.state.selectedService,
+              this.state.selectedCmd
+            )}
+          />
+        )}
+        {this.state.stage === "DEPLOY" && (
+          <DeployService
+            client={this.props.client}
             data={this.GetData(
               this.state.selectedService,
               this.state.selectedCmd
