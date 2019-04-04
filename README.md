@@ -16,3 +16,7 @@ Examples
 
 $ automium-cli --url $AUTOMIUM_URL --token $AUTOMIUM_TOKEN
 ```  
+
+## License
+
+MIT
