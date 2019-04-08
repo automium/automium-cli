@@ -4,7 +4,12 @@ import { Color } from "ink";
 import SelectInput from "ink-select-input";
 import Spinner from "ink-spinner";
 import Spec from "../Specs/Spec";
-import { NewService, DeployService, DeleteService } from "../Services/index";
+import {
+  NewService,
+  DeployService,
+  DeleteService,
+  ServiceLogs
+} from "../Services/index";
 
 type KeyValue = {
   label: string,
@@ -32,6 +37,7 @@ class Infra extends Component<Props, State> {
       cmd: [
         { label: "Specs", value: "specs" },
         { label: "Services", value: "services" },
+        { label: "Logs", value: "logs" },
         { label: "Add Service", value: "add" },
         { label: "Deploy", value: "deploy" },
         { label: "Delete", value: "delete" }
@@ -51,6 +57,9 @@ class Infra extends Component<Props, State> {
 
   handleSelect = (item: KeyValue) => {
     switch (this.state.selectedCmd) {
+      case "logs":
+        this.setState({ stage: "LOGS", selectedService: item.value });
+        break;
       case "add":
         this.setState({ stage: "ADD", selectedService: item.value });
         break;
@@ -77,7 +86,7 @@ class Infra extends Component<Props, State> {
       });
       this.setState({ stage: "SERVICES", services: specs, data: data });
     }
-    if (cmd === "services") {
+    if (cmd === "services" || cmd === "logs") {
       const data = await this.props.client.services();
       let services = [];
       data.forEach(item => {
@@ -114,6 +123,12 @@ class Infra extends Component<Props, State> {
         item => item.data.metadata.name === name
       );
       return services[0].data;
+    }
+    if (cmd === "logs") {
+      const services = this.state.data.filter(
+        item => item.data.metadata.name === name
+      );
+      return services[0];
     }
     if (cmd === "add") {
       const data = this.state.data.filter(
@@ -172,6 +187,14 @@ class Infra extends Component<Props, State> {
           <NewService
             client={this.props.client}
             data={this.GetData(
+              this.state.selectedService,
+              this.state.selectedCmd
+            )}
+          />
+        )}
+        {this.state.stage === "LOGS" && (
+          <ServiceLogs
+            service={this.GetData(
               this.state.selectedService,
               this.state.selectedCmd
             )}
