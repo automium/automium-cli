@@ -1,6 +1,6 @@
 // @flow
-import React, { Component, Fragment } from "react";
-import { Color, Text, Static } from "ink";
+import React, { Component } from "react";
+import { Color, Text } from "ink";
 import Spinner from "ink-spinner";
 
 type Props = {
