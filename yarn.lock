@@ -1312,9 +1312,9 @@ auto-bind@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/auto-bind/-/auto-bind-2.0.0.tgz#9a55a461b521f58daf955169203bed1a07a970a9"
 
-automium@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/automium/-/automium-1.2.1.tgz#82950ea21edc7928eeb134c74670c16976302f6b"
+automium@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/automium/-/automium-1.3.0.tgz#50bdae5dd5d7b0ab4f92b37e231e404ba9ab26db"
   dependencies:
     "@sentry/node" "^4.6.3"
     body-parser "^1.18.3"
