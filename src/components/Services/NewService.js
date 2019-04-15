@@ -20,7 +20,7 @@ export class NewService extends Component<Props, State> {
     super(props);
 
     //set expected stages
-    let stages = ["FLAVOR", "REPLICAS", "VERSION"];
+    let stages = ["NAME", "FLAVOR", "REPLICAS", "VERSION"];
     if (props.data.spec.env.length > 0) stages.push("ENV");
 
     this.state = {
@@ -69,6 +69,9 @@ export class NewService extends Component<Props, State> {
 
   handleChange = (value: string) => {
     let data = this.state.data;
+    if (this.state.stage === "NAME") {
+      data.metadata.name = value;
+    }
     if (this.state.stage === "FLAVOR") {
       data.spec.flavor = value;
     }
@@ -88,7 +91,15 @@ export class NewService extends Component<Props, State> {
     const { data } = this.props;
     return (
       <Box flexDirection="column">
-        <Box>---{`${data.metadata.name}`}---</Box>
+        {this.state.stage === "NAME" && (
+          <Box>
+            <Box marginRight={1}>Name:</Box>
+            <TextInput
+              value={data.metadata.name}
+              onChange={this.handleChange}
+            />
+          </Box>
+        )}
         {this.state.stage === "FLAVOR" && (
           <Box>
             <Box marginRight={1}>Flavor:</Box>

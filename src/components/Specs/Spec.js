@@ -15,6 +15,10 @@ class Spec extends Component<Props, State> {
       <Box flexDirection="column">
         <Box>------</Box>
         <Box alignItems="flex-start">
+          <Box marginRight={2}>Service:</Box>
+          <Color grey>{`${data.metadata.labels["app"]}`}</Color>
+        </Box>
+        <Box alignItems="flex-start">
           <Box marginRight={3}>Flavor:</Box>
           <Color grey>{`${data.spec.flavor}`}</Color>
         </Box>
