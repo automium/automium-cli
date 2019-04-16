@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from "react";
 import { Box, Color } from "ink";
-import { Client } from "automium";
+import { Client, ClientOptions } from "automium";
 import Login from "./Login";
 import Infra from "./Infra/Infra";
 
@@ -17,11 +17,11 @@ type State = {
 class Main extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    //TODO: add config validation
-    const client = new Client({
+    const options: ClientOptions = {
       baseUrl: props.config.url,
       auth: props.config.token
-    });
+    };
+    const client = new Client(options);
     this.state = {
       stage: "LOGIN",
       client: client,
