@@ -76,7 +76,7 @@ export class NewService extends Component<Props, State> {
       data.spec.flavor = value;
     }
     if (this.state.stage === "REPLICAS") {
-      data.spec.replicas = value;
+      data.spec.replicas = Number(value);
     }
     if (this.state.stage === "VERSION") {
       data.spec.version = value;
